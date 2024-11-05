@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    runtime: nvidia
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+    ports:
+      - "5001:5001"
+    volumes:
+      - .:/app
+      - ../data:/app/data
+    command: bash ./check.sh
+#    command: tail -f /dev/null
