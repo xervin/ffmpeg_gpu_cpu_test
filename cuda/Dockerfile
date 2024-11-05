@@ -12,6 +12,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libc6-dev \
     unzip \
     wget \
+    libpng-dev \
+    zlib1g-dev \
+    libfreetype6-dev \
+    libfontconfig1-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка nv-codec-headers
@@ -39,7 +43,10 @@ RUN mkdir -p /tmp/ffmpeg_sources && \
         --enable-nvenc \
         --enable-libnpp \
         --enable-gpl \
-        --enable-nonfree && \
+        --enable-nonfree  \
+        --enable-decoder=png \
+        --enable-decoder=png_pipe \
+        && \
     make -j$(nproc) && \
     make install && \
     rm -rf /tmp/ffmpeg_sources

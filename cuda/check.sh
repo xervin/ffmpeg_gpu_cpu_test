@@ -3,7 +3,7 @@
 # Без вотермарки
 START_TIME=$(date +%s)
 
-#ffmpeg -hwaccel cuda -i ./data/test.flv -codec:v h264_nvenc -preset p5 -codec:a aac -strict -2 -f mp4 -movflags faststart -y ./$(date +%s).mp4
+ffmpeg -hwaccel cuda -i ./data/test.flv -codec:v h264_nvenc -preset p5 -codec:a aac -strict -2 -f mp4 -movflags faststart -y ./wm_disable_$(date +%s).mp4
 
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))
@@ -14,7 +14,10 @@ echo -e "\n==========================\n"
 # С вотермаркой
 START_TIME=$(date +%s)
 
-ffmpeg -hwaccel cuda -i ./data/test.flv -loop 1 -i ./data/logo.png -filter_complex_script ./data/filter_cuda.txt -codec:v h264_nvenc -preset p5 -codec:a aac -strict -2 -f mp4 -movflags faststart -y ./$(date +%s).mp4
+ffmpeg -hwaccel cuda -i ./data/test.flv -loop 1 -i ./data/logo.png \
+  -filter_complex_script ./data/filter_cuda.txt \
+  -map "[outv]" -map "0:a?" \
+  -codec:v h264_nvenc -preset p5 -codec:a aac -strict -2 -f mp4 -movflags faststart -y ./wm_enable_$(date +%s).mp4
 
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))
